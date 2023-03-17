@@ -1,0 +1,80 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.34.4.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 24629eec094ba9fbaee34b9c335e8004aa5f678a6bb34a8c8bb9882192d4785a
+
+name:           mrmind
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/mrmind#readme>
+homepage:       https://github.com/githubuser/mrmind#readme
+bug-reports:    https://github.com/githubuser/mrmind/issues
+author:         Frederic Peshanski
+maintainer:     frederic.peschanski@lip6.fr
+copyright:      2022 F. Peschanski
+license:        AllRightsReserved
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/mrmind
+
+library
+  exposed-modules:
+      MindEngine
+  other-modules:
+      Paths_mrmind
+  hs-source-dirs:
+      src
+  default-extensions:
+      OverloadedStrings UnicodeSyntax MultiWayIf LambdaCase DuplicateRecordFields MonadComprehensions InstanceSigs
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hspec
+    , random
+    , text
+  default-language: Haskell2010
+
+executable mrmind-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_mrmind
+  hs-source-dirs:
+      app
+  default-extensions:
+      OverloadedStrings UnicodeSyntax MultiWayIf LambdaCase DuplicateRecordFields MonadComprehensions InstanceSigs
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hspec
+    , mrmind
+    , random
+    , text
+  default-language: Haskell2010
+
+test-suite mrmind-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      MindEngineSpec
+      Paths_mrmind
+  hs-source-dirs:
+      test
+  default-extensions:
+      OverloadedStrings UnicodeSyntax MultiWayIf LambdaCase DuplicateRecordFields MonadComprehensions InstanceSigs
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hspec
+    , mrmind
+    , random
+    , text
+  default-language: Haskell2010
