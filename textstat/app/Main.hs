@@ -25,7 +25,12 @@ import System.Environment
 analyse :: Text -> String -> IO()
 analyse texte titre = (putStrLn ("Analyse de texte de:" ++ titre ++ "\n"))
                         >>=(\_ -> putStrLn ("Nombre de caractères: " ++ (show (T.length texte)) ++ "\n"))
-                        >>=(\_ -> putStrLn ("Nombre de mots" ++ (show (compteMot texte)) ++ "\n"))
+                        >>=(\_ -> putStrLn ("Nombre de mots: " ++ (show (compteMot texte)) ++ "\n"))
+                        >>=(\_ -> putStrLn ("Nombre de a de code 97: " ++ (show (compteLettre 'a' texte)) ++ "\n"))
+                        >>=(\_ -> putStrLn ("Nombre de e de code 101: " ++ (show (compteLettre 'e' texte)) ++ "\n"))
+                        >>=(\_ -> putStrLn ("Les 5 lettres plus frenquence: \n" ++ printList(zipFrequence texte) ++ "\n"))
+
+
 --                        >>= let dict = consDict texte in
 --                            (\_ -> putStrLn("*** Caracteres de " ++ titre ++ "***\n\n" ++ (imprimDict (triDict dict)) ))
 
