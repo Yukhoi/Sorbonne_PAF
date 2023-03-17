@@ -28,15 +28,15 @@ checkGuess secret guess = if secret > guess then Lower
 
 -- Stratégie de raffinement des candidats (à compléter)
 -- Une stratégie simple est la suivante :
--- si le candidat est plus petit, alors on augmente de 1,
--- si c'est plus grand alors on divise par 2  (pour accélérer la recherche)
+-- si le candidat est plus petit, alors on prend la moyenne de celui et la borne superieur,
+-- si c'est plus grand alors on prend la moyenne de celui et la borne inferieur,  (pour accélérer la recherche)
 -- ===> une stratégie plus efficace serait la bienvenue, notamment en
 --      introduisant une borne max pour le choix du nombre ...
-refineGuess :: Integer -> Integer -> Integer
-refineGuess secret guess = case checkGuess secret guess of
-                                Lower -> guess + 1
-                                Greater -> guess `div` 2
-                                Equal -> guess
+refineGuess :: Integer -> Integer -> Integer -> Integer -> (Integer, Integer, Integer)
+refineGuess secret guess lower upper 
+  | guess < secret = ((guess + upper) `div` 2, guess, upper)
+  | guess > secret = ((guess + lower) `div` 2, lower, guess)
+  | otherwise = (guess,lower,upper)
                     
 
 -- refineGuess 100 50 == 51
@@ -48,13 +48,13 @@ refineGuess secret guess = case checkGuess secret guess of
 -- N'hésitez pas à consulter un manuel de Haskell comme :
 --  * Learn you a Haskell for Great Good => http://learnyouahaskell.com/chapters
 --  * ou le Haskell Wikibool => https://en.wikibooks.org/wiki/Haskell
-findSecret :: Integer -> Integer -> Integer
+findSecret :: Integer -> Integer -> Integer -> Integer -> Integer
 findSecret secret initGuess = find initGuess 1
-    where find guess nb =
-            let guess' = refineGuess secret guess
+    where find guess nb min max =
+            let (guess', min' , max') = refineGuess secret guess min max
             in if guess' == guess
                then nb
-               else (find guess' (nb + 1))
+               else (find guess' (nb + 1) min' max')
 
 -- findSecret 100 50 == 51
 -- findSecret 100 150 == 27
@@ -68,8 +68,8 @@ findSecret secret initGuess = find initGuess 1
 -- On y reviendra mais le type de retour `IO Integer`
 -- correspond à une action d'entrées/sorties qui,
 -- une fois exécutée par le runtime, retourne un entier.
-gameLoop :: Integer -> Integer -> IO Integer
-gameLoop secret nb = do -- ceci permet de chaîner des actions d'entrées/sorties en séquence
+gameLoop :: Integer -> Integer -> Integer -> Integer -> IO Integer
+gameLoop secret nb min max = do -- ceci permet de chaîner des actions d'entrées/sorties en séquence
   putStrLn ("Tentative #" ++ (show nb))    -- première action de la séquence
   putStr "Quel nombre ? "                  -- deuxième action
   hFlush stdout                            -- etc.
@@ -79,7 +79,7 @@ gameLoop secret nb = do -- ceci permet de chaîner des actions d'entrées/sortie
   if guessStr == "t"
   then do  -- triche
     putStrLn "Ok, je triche"
-    pure $ findSecret secret 0
+    pure $ findSecret secret ((min + max) `div` 2) min max 
   else do
     -- on transforme la chaîne en un entier
     let guess = read guessStr :: Integer  -- en Haskell il est fréquent de "caster" des expressions
@@ -94,7 +94,22 @@ gameLoop secret nb = do -- ceci permet de chaîner des actions d'entrées/sortie
     putStrLn (message answer)
     case answer of
       Equal -> pure nb  -- on retourne le nombre de tentatives, une valeur "pure", dans le cadre des entrées/sorties ("impures")
-      _ -> gameLoop secret (nb+1) -- sinon on n'a pas encore trouvé alors on démarre une nouvelle tentative
+      _ -> gameLoop secret (nb+1) min max-- sinon on n'a pas encore trouvé alors on démarre une nouvelle tentative
+
+
+startLoop :: Integer -> Integer -> IO Integer
+startLoop min max = do
+  putStr "Donne un secret: "
+  hFlush stdout
+  secretStr <- getLine
+  let secret = read secretStr :: Integer
+  if secret < min || secret > max 
+    then do 
+        putStrLn "Le secret donné doit être dans l'intervalle"
+        startLoop min max
+    else pure secret
+
+
 
 -- le point d'entrée du programme
 -- la valeur `()` s'appelle *unit* et est du type `()` (également *Unit*).
@@ -104,19 +119,21 @@ main = do
   putStrLn "Devine le nombre!"
   putStrLn "================="
   putStrLn "  -> un super jeu de PAF!"
-  putStr "Donner l'intervalle de depart: "
+  -- le defil 1
+  putStr "Donner l'intervalle pour le secret"
+  putStr "Donner la borne minimal: "
   hFlush stdout
-  intervalleStr <- getLine
-  let intervalle = read intervalleStr :: Integer
-  putStr "Donne un secret: "
+  minStr <- getLine
+  putStr "Donner la borne maximal: "
   hFlush stdout
-  secretStr <- getLine
-  let secret = read secretStr :: Integer
-  -- ici on affiche 40 retours de ligne pour faire disparaître la saisie du nombre (ce n'est pas très "propre" ...)
+  maxStr <- getLine
+  let min = read minStr :: Integer
+  let max = read maxStr :: Integer
+  secret <- startLoop min max -- ici on affiche 40 retours de ligne pour faire disparaître la saisie du nombre (ce n'est pas très "propre" ...)
   newlines 40
   putStrLn "Merci ! Le secret est enregistré."
   putStrLn "Maintenant votre adversaire va devoir le deviner ..."
-  nb <- gameLoop secret 1
+  nb <- gameLoop secret 1 min max
   putStrLn ("Vous avez trouvé le secret en " ++ (show nb) ++ " tentative(s)")
 
 -- une petite fonction auxiliaire pour ajouter des retours charriots.
@@ -126,3 +143,5 @@ newlines n = do
   putStrLn ""
   newlines (n-1)
 
+randomNb :: Integer -> Integer
+randomNb seed = iterate (\x -> (25210345917 * x + 11) `mod` (2^48)) seed
