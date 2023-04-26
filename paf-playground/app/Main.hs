@@ -143,5 +143,5 @@ newlines n = do
   putStrLn ""
   newlines (n-1)
 
-randomNb :: Integer -> Integer
+randomNb :: Integer -> [Integer]
 randomNb seed = iterate (\x -> (25210345917 * x + 11) `mod` (2^48)) seed

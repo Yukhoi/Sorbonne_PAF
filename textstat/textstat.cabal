@@ -53,6 +53,7 @@ test-suite textstat-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      TextStatSpec
       Paths_textstat
   hs-source-dirs:
       test
