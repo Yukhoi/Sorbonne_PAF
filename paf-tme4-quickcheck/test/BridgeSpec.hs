@@ -3,7 +3,7 @@ module BridgeSpec where
 import Test.Hspec
 import Test.QuickCheck
 
-import Bridge
+import Bridge as BR
 
 property_inv_initBridge :: Int -> Property
 property_inv_initBridge lim =
@@ -28,9 +28,9 @@ bridgeSpecInit = do
 genBridgeFree :: Gen IslandBridge
 genBridgeFree = do
     lim <- choose (1, 100)  -- la limite initiale
-    nbI <- choose (0, 50)
-    nbTo <- choose (0, 50)
-    nbFrom <- choose (0, 50)
+    nbI <- choose (0, lim)
+    nbTo <- choose (0, lim-nbI)
+    nbFrom <- choose (0, lim-nbI-nbTo)
     return $ if nbI + nbTo + nbFrom == lim
              then BridgeClosed lim nbTo nbFrom
              else BridgeOpened lim nbTo nbI nbFrom
@@ -73,6 +73,7 @@ instance Arbitrary IslandBridge where
 
 -- quickCheck islandBridge_inv
 
+------------------------------------------------------------ enterToIsland ------------------------------------------------------------
 property_inv_enterToIsland :: IslandBridge -> Property
 property_inv_enterToIsland b =
   (prop_inv_IslandBridge b)
@@ -88,3 +89,54 @@ enterToIslandSpec = do
   describe "enterToIsland" $ do
     it "preserves the invariant" $
       property property_inv_enterToIsland
+
+
+------------------------------------------------------------ leaveToIsland ------------------------------------------------------------
+property_inv_leaveToIsland :: IslandBridge -> Property
+property_inv_leaveToIsland b =
+  (prop_inv_IslandBridge b)
+  && (prop_pre_leaveToIsland  b)
+  ==> classify (bridgeLimit b < 10) "small capacity (<10)" $
+  classify (bridgeLimit b < 50) "medium capacity (<50)" $
+  classify (bridgeLimit b <= 100) "large capacity (>=50)" $
+  property $ prop_inv_IslandBridge (leaveToIsland b)
+
+leaveToIslandSpec = do
+  describe "leaveToIsland" $ do
+    it "preserves the invariant" $
+      property property_inv_leaveToIsland
+
+------------------------------------------------------------ enterFromIsland ------------------------------------------------------------
+
+property_inv_enterFromIsland :: IslandBridge -> Property
+property_inv_enterFromIsland b =
+  (prop_inv_IslandBridge b)
+  && (prop_pre_enterFromIsland  b)
+  ==> classify (bridgeLimit b < 10) "small capacity (<10)" $
+  classify (bridgeLimit b < 50) "medium capacity (<50)" $
+  classify (bridgeLimit b <= 100) "large capacity (>=50)" $
+  property $ prop_inv_IslandBridge (enterFromIsland b)
+
+enterFromIslandSpec = do
+  describe "enterFromIsland" $ do
+    it "preserves the invariant" $
+      property property_inv_enterFromIsland
+
+
+------------------------------------------------------------ leaveFromIsland ------------------------------------------------------------
+
+property_inv_leaveFromIsland :: IslandBridge -> Property
+property_inv_leaveFromIsland b =
+  (prop_inv_IslandBridge b)
+  && (prop_pre_leaveFromIsland  b)
+  ==> classify (bridgeLimit b < 10) "small capacity (<10)" $
+  classify (bridgeLimit b < 50) "medium capacity (<50)" $
+  classify (bridgeLimit b <= 100) "large capacity (>=50)" $
+  property $ prop_inv_IslandBridge (leaveFromIsland b)
+
+leaveFromIslandSpec = do
+  describe "leaveFromIsland" $ do
+    it "preserves the invariant" $
+      property property_inv_leaveFromIsland
+
+------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,4 +1,21 @@
-module Bridge where
+module Bridge
+-- (
+--   mkBridge,
+--   nbCarsOnIsland,
+--   nbCarsToIsland,
+--   nbCarsFromIsland,
+--   nbCars,
+--   bridgeLimit,
+--   prop_inv_IslandBridge,
+--   initBridge,
+--   prop_pre_initBridge,
+--   enterToIsland,
+--   leaveToIsland,
+--   leaveFromIsland,
+--   enterFromIsland,
+--   -- IslandBridge(..)
+-- )
+ where
 
 data IslandBridge =
   BridgeOpened Int Int Int Int 
@@ -56,20 +73,31 @@ prop_pre_enterToIsland :: IslandBridge -> Bool
 prop_pre_enterToIsland b@(BridgeOpened lim _ _ _) = nbCars b < lim
 prop_pre_enterToIsland (BridgeClosed _ _ _) = False
 
+-- | Vehicule qui quitte le pont pour l'ile
 leaveToIsland :: IslandBridge -> IslandBridge
-leaveToIsland _ = undefined
+leaveToIsland (BridgeOpened lim nbTo nbI nbFrom) = mkBridge lim (nbTo-1) (nbI+1) nbFrom            -- Nombre voitures sur l'ile + 1 et nombre voitures vers l'ile - 1 
+leaveToIsland (BridgeClosed lim nbTo nbFrom) = mkBridge lim (nbTo-1) (lim-nbFrom-(nbTo-1)) nbFrom  -- Nombre voitures sur l'ile = l'equation lim-nbFrom-(nbTo-1) et nombre voitures vers l'ile - 1 
 
-prop_pre_leaveToIsland :: IslandBridge -> Bool
-prop_pre_leaveToIsland _ = undefined
+-- | Precondition leaveToIsland
+prop_pre_leaveToIsland :: IslandBridge -> Bool  
+prop_pre_leaveToIsland (BridgeOpened lim nbTo nbI nbFrom) = nbTo > 0        -- La voiture qui quitte le pont doit exister si le pont n'est pas ferme
+prop_pre_leaveToIsland (BridgeClosed lim nbTo nbFrom) = nbTo > 0            -- La voiture qui quitte le pont doit exister si le pont est ferme
 
+-- |opération : entrée de l'île vers le contient
 enterFromIsland :: IslandBridge -> IslandBridge
-enterFromIsland _ = undefined
+enterFromIsland (BridgeOpened lim nbTo nbI nbFrom) = mkBridge lim nbTo (nbI-1) (nbFrom+1) 
+enterFromIsland (BridgeClosed _ _ _) = error "Cannot enter bridge from Island"
+-- enterFromIsland (BridgeClosed lim nbTo nbFrom) = mkBridge lim nbTo (lim-nbTo-(nbFrom+1)) (nbFrom+1)
 
 prop_pre_enterFromIsland :: IslandBridge -> Bool
-prop_pre_enterFromIsland _ = undefined
+prop_pre_enterFromIsland b@(BridgeOpened lim nbTo nbI nbFrom) = (nbCars b < lim) && (nbI > 0)
+prop_pre_enterFromIsland (BridgeClosed _ _ _) = False
 
+-- | Vehicule qui quitte le pont pour le continent
 leaveFromIsland :: IslandBridge -> IslandBridge
-leaveFromIsland _ = undefined
+leaveFromIsland (BridgeOpened lim nbTo nbI nbFrom) = mkBridge lim nbTo nbI (nbFrom-1) 
+leaveFromIsland (BridgeClosed lim nbTo nbFrom) = mkBridge lim nbTo (lim-nbTo-(nbFrom-1)) (nbFrom-1)
 
 prop_pre_leaveFromIsland :: IslandBridge -> Bool
-prop_pre_leaveFromIsland _ = undefined
+prop_pre_leaveFromIsland (BridgeOpened lim nbTo nbI nbFrom) = nbFrom > 0
+prop_pre_leaveFromIsland (BridgeClosed lim nbTo nbFrom) = nbFrom > 0

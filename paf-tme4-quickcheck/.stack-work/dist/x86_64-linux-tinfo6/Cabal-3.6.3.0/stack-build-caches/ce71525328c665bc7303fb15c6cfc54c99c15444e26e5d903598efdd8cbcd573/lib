@@ -17,7 +17,10 @@
 : hash: b34fa5ae6abafc45106a2cef464f2dcb36518528f5be6cdca21774142c3118a3
 ? /home/s-daniiel/Desktop/M1 STL 2022-2023/Semestre 2/PAF - Programmation Avancée
   en Fonctionnel/Sorbonne_PAF/paf-tme4-quickcheck/src/Bridge.hs
-: hash: eeb57213473b57a5f38af73f63b22243f742c0983c4a174ae7ac40547153b773
+: hash: 9dbd3ffb75c9479a4880ffb26b7d7ff59a3f374e5f9f0a33ad3f0138402107d2
+? /home/s-daniiel/Desktop/M1 STL 2022-2023/Semestre 2/PAF - Programmation Avancée
+  en Fonctionnel/Sorbonne_PAF/paf-tme4-quickcheck/src/Bridge2.hs
+: hash: 0990fc10c6e0a83a2984dbd44a9fcf410e02fca342a40465359e6469991960fc
 ? /home/s-daniiel/Desktop/M1 STL 2022-2023/Semestre 2/PAF - Programmation Avancée
   en Fonctionnel/Sorbonne_PAF/paf-tme4-quickcheck/src/Lib.hs
 : hash: 11d6d255cb397fa45980eb516ea685146565d9de2108c4eea356ea41db8364be
@@ -26,9 +29,9 @@
 : hash: 2a3d5f159b0941bc716187fced86907f619a9172119733c3010eb8c4a131b129
 ? /home/s-daniiel/Desktop/M1 STL 2022-2023/Semestre 2/PAF - Programmation Avancée
   en Fonctionnel/Sorbonne_PAF/paf-tme4-quickcheck/src/Split.hs
-: hash: 899133eba82b609b8ce95d3b1677f350e846d2cbc1c9c7767f7872bdffc47de2
+: hash: 7d2ab795227e54e66464552315fd894e8d2de3f8b53902747c334b45f93b2fe4
 ? /home/s-daniiel/Desktop/M1 STL 2022-2023/Semestre 2/PAF - Programmation Avancée
   en Fonctionnel/Sorbonne_PAF/paf-tme4-quickcheck/tuto-quickcheck.cabal
-: hash: a9b4d52ac9f1f418813a8d914570dc09ffc24dca733b433133062c563716739f
+: hash: 491746a6170e9eaee8c37f71c319ec233149192f9616c2686d89ff5aec80a06e
 /usr/include/stdc-predef.h:
   hash: d6bcc58441a423bbb3a52171fcd3b84d8b36e332a55221a1c3e6e899bc43ccb3

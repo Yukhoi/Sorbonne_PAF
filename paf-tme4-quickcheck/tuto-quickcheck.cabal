@@ -26,6 +26,7 @@ source-repository head
 library
   exposed-modules:
       Bridge
+      Bridge2
       Lib
       Revrev
       Split
@@ -59,6 +60,7 @@ test-suite tuto-quickcheck-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Bridge2Spec
       BridgeSpec
       RevrevSpec
       SplitSpec

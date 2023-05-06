@@ -38,18 +38,12 @@ splitSpec2 = do               -- Nom du test HSpec
 splitSpec3 = do               -- Nom du test HSpec
   describe "split" $ do       -- Precision de quelle fonction on test
     it "can be undone with unsplit (v3)" $ property $           -- Description du test avec ajout un test de propriete QuickCheck
-      forAll (oneof [return "bla bla bli"
-                     , return "toto"
+      forAll (oneof [return "bla bla bli"                       -- Choix d'un generetaur constant cree par return ... et donne a 'forAll' pour qu'il
+                     , return "toto"                            -- teste pour un certain nombre de chaines de caracteres de cette liste
                      , return ""
                      , return "un    deux trois   quatre"]) $
-      \xs -> prop_split_unsplit ' ' xs
+      \xs -> prop_split_unsplit ' ' xs                          -- On verifie la propriete pour des chaines de caracteres tirees donc aleatoirement dans cette liste
 
 -- | oneof :: [Gen a] -> Gen a
 -- Permet de generer des valeurs aleatoires a partir d'une liste de generateurs 
 -- en choisisant aleatoirement l'un des generateurs et utilise ce generateur pour generer une valeur aleatoire
-
-
-splitSpec00 = do               -- Nom du test HSpec
- describe "split00" $ do       -- Precision de quelle fonction on test
-   it "00" $        -- Description du test unitaire
-     (split 'a' "a") `shouldBe` ["a"]     -- Comparaison du resultat du test et du resultat attendu  
