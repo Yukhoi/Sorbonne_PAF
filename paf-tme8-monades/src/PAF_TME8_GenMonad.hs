@@ -104,7 +104,7 @@ genNat = do
                      | otherwise = return k
 
 listOfSize :: Gen a -> Int -> Gen [a]
-listOfSize _ _ = loop size
+listOfSize gen size = loop size
                         where loop cpt 
                                 | cpt <= 0 = pure []
                                 | otherwise =  liftA2 (:) gen (loop (cpt - 1)) 

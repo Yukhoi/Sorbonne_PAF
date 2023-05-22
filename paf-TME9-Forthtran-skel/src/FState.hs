@@ -43,18 +43,18 @@ instance Show FValue where
 data FInstr =
   FVal FValue         -- une valeur comme instruction
   | FPrim FPrimitive  -- une primitive
-  | FOp Foperation
+  -- | FOp Foperation
   | FWord String      -- un mot
   | FDef String FProgram -- une définition de mot
   deriving (Show, Eq)
 
-data Foperation =
-  PLUS
-  |MINUS
-  |TIMES
-  |DEVISE
-  |SQUARE
-  deriving (Show, Eq)
+-- data Foperation =
+--   PLUS
+--   |MINUS
+--   |TIMES
+--   |DEVISE
+--   |SQUARE
+--   deriving (Show, Eq)
 
 -- | Les primitives
 data FPrimitive =
@@ -97,11 +97,11 @@ initialFMachine = FMachine {
   , fWords = M.fromList [("POP", mkSeq [[FPrim POP]])
                         ,("EMIT", mkSeq [[FPrim EMIT]])
                         ,("DUP", mkSeq [[FPrim DUP]])
-                        ,("+", mkSeq [[FOp PLUS]])
-                        ,("-", mkSeq [[FOp MINUS]])
-                        ,("*", mkSeq [[FOp TIMES]])
-                        ,("/", mkSeq [[FOp DEVISE]])
-                        ,("SQUARE", mkSeq [[FOp SQUARE]])
+                        -- ,("+", mkSeq [[FOp PLUS]])
+                        -- ,("-", mkSeq [[FOp MINUS]])
+                        -- ,("*", mkSeq [[FOp TIMES]])
+                        -- ,("/", mkSeq [[FOp DEVISE]])
+                        -- ,("SQUARE", mkSeq [[FOp SQUARE]])
                         ]
   , fProg = []
   }

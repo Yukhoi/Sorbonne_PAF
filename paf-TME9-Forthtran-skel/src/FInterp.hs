@@ -48,12 +48,12 @@ interpPrim EMIT = do
   liftIO $ putStr (show x)
   return FNone
 
-interpOper :: Foperation -> Forth
-interpOper PLUS = +
-interpOper MINUS = -
-interpOper TIMES = *
-interpOper DEVISE = /
-interOper SQUARE = square
+-- interpOper :: Foperation -> Forth
+-- interpOper PLUS = +
+-- interpOper MINUS = -
+-- interpOper TIMES = *
+-- interpOper DEVISE = /
+-- interOper SQUARE = square
 
 
 -- | interpretation des instructions
